@@ -9,14 +9,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
 
 private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @ModelAttribute("registerData")
     public UserRegisterDTO createEmptyDTO(){
         return new UserRegisterDTO();
@@ -34,7 +37,7 @@ private final UserService userService;
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors() || !userService.register(data)){
             redirectAttributes.addFlashAttribute("registerData",
                     data);
             redirectAttributes.addFlashAttribute("org.springframework" +
@@ -44,9 +47,6 @@ private final UserService userService;
 
             return "redirect:/register";
         }
-
-
-
 
 
         return "redirect:/login";
