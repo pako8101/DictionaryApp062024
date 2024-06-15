@@ -17,7 +17,8 @@ public class User {
     private String password;
     @Column(nullable = false,unique = true)
     private String email;
-    @OneToMany(mappedBy = "addedBy")
+    @OneToMany(mappedBy = "addedBy",fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Word> addedWords;
 
     public User() {

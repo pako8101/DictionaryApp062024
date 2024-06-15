@@ -1,5 +1,6 @@
 package com.dictionaryapp.controller;
 
+import com.dictionaryapp.model.dto.UserLoginDTO;
 import com.dictionaryapp.model.dto.UserRegisterDTO;
 import com.dictionaryapp.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -14,19 +15,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
-private final UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @ModelAttribute("registerData")
-    public UserRegisterDTO createEmptyDTO(){
+    public UserRegisterDTO createEmptyDTO() {
         return new UserRegisterDTO();
     }
 
+    @ModelAttribute("loginData")
+    public UserLoginDTO loginData() {
+        return new UserLoginDTO();
+    }
+
     @GetMapping("/register")
-    public String viewRegister(){
+    public String viewRegister() {
 
 
         return "register";
@@ -37,7 +43,7 @@ private final UserService userService;
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
 
-        if (bindingResult.hasErrors() || !userService.register(data)){
+        if (bindingResult.hasErrors() || !userService.register(data)) {
             redirectAttributes.addFlashAttribute("registerData",
                     data);
             redirectAttributes.addFlashAttribute("org.springframework" +
@@ -47,14 +53,46 @@ private final UserService userService;
 
             return "redirect:/register";
         }
-
+userService.register(data);
 
         return "redirect:/login";
     }
+
     @PostMapping("/logout")
-    public String logout(HttpSession httpSession){
-        httpSession.invalidate();
+    public String logout() {
+        userService.logout();
         return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String viewLogin() {
+
+
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String doLogin(@Valid UserLoginDTO data,
+                          BindingResult bindingResult,
+                          RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("loginData", data);
+            redirectAttributes.addFlashAttribute("org.springframework" +
+                            ".validation.BindingResult" +
+                            ".loginData",
+                    bindingResult);
+        }
+        boolean success =
+                userService.login(data);
+
+        if (!success) {
+            redirectAttributes.addFlashAttribute("loginData", data);
+            redirectAttributes
+                    .addFlashAttribute(
+                            "userPassMismatch", true);
+            return "redirect:login";
+        }
+        return "redirect:/home";
     }
 
 }
