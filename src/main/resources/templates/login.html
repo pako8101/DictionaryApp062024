@@ -15,28 +15,49 @@
         <!--    Example: Render errors messages with fields.errors - you can make it differently. -->
         <!--    <div th:each="error: ${#fields.errors()}" th:text="${error}" class="text-danger">Error messages</div>-->
 
-        <div th:each="error: ${#fields.errors()}" th:text="${error}" class="text-danger">Error messages</div>
+<!--        <div th:each="error: ${#fields.errors()}" th:text="${error}" class="text-danger">Error messages</div>-->
 <th:block th:if="${userPassMismatch}">
         <div class="text-danger">Error messages</div>
         <div class="text-danger">Incorrect username or password!</div>
         </th:block>
+
+<!--        <div th:each="error: ${#fields.detailedErrors()}"-->
+<!--             th:text="${error}" class="text-danger">-->
+<!--            <span th:text="${error.getFieldName()}"></span>-->
+<!--            <span th:text="${error.getMessage()}"></span>-->
+
+<!--        </div>-->
+
+
         <div class="form-group">
             <div class="label-holder text-white d-flex justify-content-center">
                 <label for="username" class="h3 mb-2">Username</label>
             </div>
             <input th:field="*{username}"
+                   th:errorclass="'is-invalid bg-danger'"
                     type="text"
-                    class="form-control" id="username" name="username"/>
+                    class="form-control"
+                   id="username"
+                   name="username"/>
+            <small th:each="error: ${#fields.errors('username')}"
+                   th:text="${error}"
+                   class="invalid-feedback text-danger"
+            >Username error message</small>
         </div>
 
         <div class="form-group">
             <div class="label-holder text-white d-flex justify-content-center">
                 <label for="password" class="h3 mb-2">Password</label>
             </div>
-            <input
+            <input th:field="*{password}"
+                   th:errorclass="'is-invalid bg-danger'"
                     type="password"
                     class="form-control" id="password"
                     name="password"/>
+            <small th:each="error: ${#fields.errors('password')}"
+                   th:text="${error}"
+                   class="invalid-feedback text-danger"
+            >Username error message</small>
         </div>
 
         <div class="button-holder d-flex justify-content-center">

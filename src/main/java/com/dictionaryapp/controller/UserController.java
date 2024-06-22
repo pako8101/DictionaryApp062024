@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,7 @@ public class UserController {
     public String doRegister(@Valid UserRegisterDTO data,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
-
+bindingResult.addError(new ObjectError(data.getUsername(), "Username is not proper format!"));
         if (bindingResult.hasErrors() || !userService.register(data)) {
             redirectAttributes.addFlashAttribute("registerData",
                     data);

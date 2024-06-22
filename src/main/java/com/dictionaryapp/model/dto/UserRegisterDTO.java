@@ -4,17 +4,17 @@ import jakarta.validation.constraints.*;
 
 public class UserRegisterDTO {
 
-    @Size(min = 3,max = 20)
-    @NotNull
+    @Size(min = 3,max = 20,message = "Username must be between 3 and 20 symbols!")
+    @NotNull(message = "Username must not be empty!")
     private String username;
-    @Email
-    @NotBlank
+    @Email(message = "Email must be valid format!")
+    @NotBlank(message = "Email must not be empty!")
     private String email;
-    @Size(min = 3,max = 20)
-    @NotNull
+    @Size(min = 3,max = 20,message = "Password must be between 3 and 20 symbols!")
+    @NotNull(message = "Password must not be empty!")
     private String password;
-    @Size(min = 3,max = 20)
-    @NotNull
+    @Size(min = 3,max = 20,message = "Password must be between 3 and 20 symbols!")
+    @NotNull(message = "Password must not be empty!")
     private String confirmPassword;
 
     public UserRegisterDTO() {
