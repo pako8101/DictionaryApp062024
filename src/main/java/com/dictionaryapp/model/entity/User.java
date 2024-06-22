@@ -3,6 +3,7 @@ package com.dictionaryapp.model.entity;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,18 @@ public class User {
 
     public User() {
         addedWords = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(getAddedWords(), user.getAddedWords());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAddedWords());
     }
 
     public long getId() {
